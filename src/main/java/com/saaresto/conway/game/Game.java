@@ -24,24 +24,20 @@ public class Game {
                 universe.getGrid()[x][y] = cellToAdd;
 
                 // build relationships with previously created cells
-                // left
                 if (x > 0) {
                     final Cell leftSibling = universe.getGrid()[x - 1][y];
                     leftSibling.addSibling(cellToAdd);
                     cellToAdd.addSibling(leftSibling);
-                    // top left
                     if (y > 0) {
                         final Cell topLeftSibling = universe.getGrid()[x - 1][y - 1];
                         topLeftSibling.addSibling(cellToAdd);
                         cellToAdd.addSibling(topLeftSibling);
                     }
                 }
-                // top
                 if (y > 0) {
                     final Cell topSibling = universe.getGrid()[x][y - 1];
                     topSibling.addSibling(cellToAdd);
                     cellToAdd.addSibling(topSibling);
-                    // top right
                     if (x < this.config.getColumnCount() - 1) {
                         final Cell topRightSibling = universe.getGrid()[x + 1][y - 1];
                         topRightSibling.addSibling(cellToAdd);
@@ -60,13 +56,12 @@ public class Game {
     }
 
     public void run() {
-        System.out.println("Running the conway");
-
         if (universe == null) {
             init();
         }
 
         while (universe.isChanged()) {
+            config.getPrinter().print(this.universe);
             universe.setChanged(tick());
             try {
                 Thread.sleep(200);
@@ -77,8 +72,6 @@ public class Game {
     }
 
     private boolean tick() {
-        config.getPrinter().print(this.universe);
-
         List<Cell> toKill = new ArrayList<>();
         List<Cell> toReanimate = new ArrayList<>();
 
