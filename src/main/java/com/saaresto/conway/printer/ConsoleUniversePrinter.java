@@ -9,7 +9,7 @@ public class ConsoleUniversePrinter implements UniversePrinter {
         clearConsole();
         for (int y = 0; y < universe.getGrid().length; y++) {
             for (int x = 0; x < universe.getGrid()[y].length; x++) {
-                System.out.print(universe.getGrid()[x][y].isAlive() ? "■" : "□");
+                System.out.print(universe.getGrid()[x][y].isAlive() ? "■" : "~");
                 System.out.print(" ");
             }
             System.out.println();

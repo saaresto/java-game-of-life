@@ -10,11 +10,6 @@ public class Universe {
 
     }
 
-    public Universe(Cell[][] grid, boolean isChanged) {
-        this.grid = grid;
-        this.isChanged = isChanged;
-    }
-
     public Cell[][] getGrid() {
         return grid;
     }

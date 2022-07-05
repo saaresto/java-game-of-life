@@ -25,16 +25,8 @@ public class GameConfig {
         return columnCount;
     }
 
-    public void setColumnCount(int columnCount) {
-        this.columnCount = columnCount;
-    }
-
     public int getRowCount() {
         return rowCount;
-    }
-
-    public void setRowCount(int rowCount) {
-        this.rowCount = rowCount;
     }
 
     public int[] getInitialAliveCellsCoordinates() {
