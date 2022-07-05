@@ -4,9 +4,9 @@ import com.saaresto.conway.printer.UniversePrinter;
 
 public class GameConfig {
 
-    private int columnCount;
+    private final int columnCount;
 
-    private int rowCount;
+    private final int rowCount;
 
     /**
      * Stream of coordinates stored as "x1, y1, x2, y2, ... xN, yN"

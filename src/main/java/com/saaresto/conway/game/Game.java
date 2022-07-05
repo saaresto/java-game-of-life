@@ -18,9 +18,36 @@ public class Game {
         universe.setChanged(true);
         universe.setGrid(new Cell[this.config.getRowCount()][this.config.getColumnCount()]);
 
-        for (int x = 0; x < this.config.getColumnCount(); x++) {
-            for (int y = 0; y < this.config.getRowCount(); y++) {
-                universe.getGrid()[x][y] = new Cell(x, y, false);
+        for (int y = 0; y < this.config.getRowCount(); y++) {
+            for (int x = 0; x < this.config.getColumnCount(); x++) {
+                Cell cellToAdd = new Cell(x, y, false);
+                universe.getGrid()[x][y] = cellToAdd;
+
+                // build relationships with previously created cells
+                // left
+                if (x > 0) {
+                    final Cell leftSibling = universe.getGrid()[x - 1][y];
+                    leftSibling.addSibling(cellToAdd);
+                    cellToAdd.addSibling(leftSibling);
+                    // top left
+                    if (y > 0) {
+                        final Cell topLeftSibling = universe.getGrid()[x - 1][y - 1];
+                        topLeftSibling.addSibling(cellToAdd);
+                        cellToAdd.addSibling(topLeftSibling);
+                    }
+                }
+                // top
+                if (y > 0) {
+                    final Cell topSibling = universe.getGrid()[x][y - 1];
+                    topSibling.addSibling(cellToAdd);
+                    cellToAdd.addSibling(topSibling);
+                    // top right
+                    if (x < this.config.getColumnCount() - 1) {
+                        final Cell topRightSibling = universe.getGrid()[x + 1][y - 1];
+                        topRightSibling.addSibling(cellToAdd);
+                        cellToAdd.addSibling(topRightSibling);
+                    }
+                }
             }
         }
 
@@ -57,15 +84,16 @@ public class Game {
 
         for (int y = 0; y < this.config.getRowCount(); y++) {
             for (int x = 0; x < this.config.getColumnCount(); x++) {
-                int siblingsCount = calculateSiblingsCount(x, y);
-                if (siblingsCount < 2 && universe.getGrid()[y][x].isAlive()) {
-                    toKill.add(universe.getGrid()[y][x]);
+                final Cell cell = this.universe.getGrid()[y][x];
+                int siblingsCount = cell.getAliveSiblingsCount();
+                if (siblingsCount < 2 && cell.isAlive()) {
+                    toKill.add(cell);
                 }
-                if (siblingsCount == 3 && !universe.getGrid()[y][x].isAlive()) {
-                    toReanimate.add(universe.getGrid()[y][x]);
+                if (siblingsCount == 3 && !cell.isAlive()) {
+                    toReanimate.add(cell);
                 }
-                if (siblingsCount > 3 && universe.getGrid()[y][x].isAlive()) {
-                    toKill.add(universe.getGrid()[y][x]);
+                if (siblingsCount > 3 && cell.isAlive()) {
+                    toKill.add(cell);
                 }
             }
         }
@@ -80,49 +108,4 @@ public class Game {
         return toKill.size() > 0 && toReanimate.size() > 0;
     }
 
-    private int calculateSiblingsCount(int x, int y) {
-        int count = 0;
-
-        // top left
-        if (x > 0 && y > 0) {
-            if (universe.getGrid()[y - 1][x - 1].isAlive()) count++;
-        }
-
-        // top
-        if (y > 0) {
-            if (universe.getGrid()[y - 1][x].isAlive()) count++;
-        }
-
-        // top right
-        if (y > 0 && x < universe.getGrid()[y - 1].length - 1) {
-            if (universe.getGrid()[y - 1][x + 1].isAlive()) count++;
-        }
-
-        // left
-        if (x > 0) {
-            if (universe.getGrid()[y][x - 1].isAlive()) count++;
-        }
-
-        // right
-        if (x < universe.getGrid()[y].length - 1) {
-            if (universe.getGrid()[y][x + 1].isAlive()) count++;
-        }
-
-        // bottom left
-        if (x > 0 && y < universe.getGrid().length - 1) {
-            if (universe.getGrid()[y + 1][x - 1].isAlive()) count++;
-        }
-
-        // bottom
-        if (y < universe.getGrid().length - 1) {
-            if (universe.getGrid()[y + 1][x].isAlive()) count++;
-        }
-
-        // bottom right
-        if (y < universe.getGrid().length - 1 && x < universe.getGrid()[y + 1].length - 1) {
-            if (universe.getGrid()[y + 1][x + 1].isAlive()) count++;
-        }
-
-        return count;
-    }
 }

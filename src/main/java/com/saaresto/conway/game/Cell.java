@@ -1,31 +1,21 @@
 package com.saaresto.conway.game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Cell {
 
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
     private boolean isAlive;
+
+    private final List<Cell> siblings;
 
     public Cell(int x, int y, boolean isAlive) {
         this.x = x;
         this.y = y;
         this.isAlive = isAlive;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
+        this.siblings = new ArrayList<>();
     }
 
     public boolean isAlive() {
@@ -34,5 +24,13 @@ public class Cell {
 
     public void setAlive(boolean alive) {
         isAlive = alive;
+    }
+
+    public void addSibling(Cell cell) {
+        siblings.add(cell);
+    }
+
+    public int getAliveSiblingsCount() {
+        return (int) siblings.stream().filter(Cell::isAlive).count();
     }
 }
